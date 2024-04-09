@@ -1,4 +1,4 @@
-# pwtk: PlaneWave Toolkit
+# pwtk: PlaneWave ToolKit
 
 pwtk, short for PlaneWave Toolkit, is a comprehensive collection of Python scripts tailored to streamline various tasks within computational materials science workflows. It is specifically crafted to facilitate seamless conversion and manipulation of atomic structure files between the VASP POSCAR format and Quantum Espresso input/output file formats. Additionally, pwtk offers utilities for applying uniaxial strain to atomic structures, enabling the simulation of mechanical responses with ease and precision.
 
