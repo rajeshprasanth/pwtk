@@ -1,0 +1,39 @@
+{
+  "control": {
+    "calculation": "scf",
+    "restart_mode": "from_scratch",
+    "outdir": "./output",
+    "pseudo_dir": "/home/rajeshprashanth/pseudo/",
+    "tstress": true,
+    "tprnfor": true,
+    "verbosity": "high",
+    "etot_conv_thr": 1.0E-6,
+    "forc_conv_thr": 1.0E-5
+  },
+  "system": {
+    "ibrav": 0,
+    "nat": null,
+    "ntyp": null,
+    "nbnd": 16,
+    "ecutwfc": 50
+  },
+  "electrons": {
+    "conv_thr": 1.0E-8,
+    "diago_cg_maxiter": 5000,
+    "electron_maxstep": 5000,
+    "diagonalization": "cg"
+  },
+  "ions": {
+    "ion_dynamics": "bfgs"
+  },
+  "cell": {
+    "press": 0.0E0,
+    "press_conv_thr": 0.1E-3
+  },
+  "pseudopotentials": {
+    "Li" : "Li.pbesol-s-rrkjus_psl.1.0.0.UPF",
+    "O": "O.pbesol-n-rrkjus_psl.1.0.0.UPF"
+  },
+  "kspacing": 0.2,
+  "crystal_coordinates": true
+}
