@@ -1,0 +1,135 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\title{POSCAR Strain Application Script Documentation}
+\author{Rajesh Prashanth A \\ \texttt{rajeshprasanth@rediffmail.com}}
+\date{Version 1.0.0, Thu Apr 4, 2024}
+
+\begin{document}
+\maketitle
+
+\section{Overview}
+This Python script applies controlled strain to a crystal lattice represented in a VASP POSCAR file. Supported strain types include uniaxial, biaxial, shear, and hydrostatic. It is useful for first-principles simulations of strained materials.
+
+\section{Installation Requirements}
+\begin{itemize}
+    \item Python 3.8 or higher
+    \item ASE (\texttt{pip install ase})
+    \item NumPy (\texttt{pip install numpy})
+\end{itemize}
+
+\section{Strain Types Supported}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Type} & \textbf{Direction(s)} & \textbf{Description} \\
+\hline
+Uniaxial & x, y, z & Stretch/compress along one axis \\
+Shear & xy, yz, xz & Distort lattice shape without uniform scaling \\
+Biaxial & xy-biaxial, yz-biaxial, xz-biaxial & Expand/compress two axes simultaneously \\
+Hydrostatic & xyz & Uniform expansion/compression along all axes \\
+\hline
+\end{tabular}
+
+\section{Mathematical Formalism}
+
+\subsection{Strain Tensor}
+Strain is represented by a second-order tensor:
+\[
+\boldsymbol{\epsilon} =
+\begin{pmatrix}
+\epsilon_{xx} & \epsilon_{xy} & \epsilon_{xz} \\
+\epsilon_{yx} & \epsilon_{yy} & \epsilon_{yz} \\
+\epsilon_{zx} & \epsilon_{zy} & \epsilon_{zz}
+\end{pmatrix}
+\]
+
+\paragraph{Uniaxial strain:} Only the diagonal element along the strained axis is non-zero. Example, x-direction:
+\[
+\epsilon_{xx} = \text{strain\_value}, \quad
+\epsilon_{yy} = 0, \quad
+\epsilon_{zz} = 0
+\]
+
+\paragraph{Biaxial strain:} Two diagonal elements non-zero. Example, xy-plane:
+\[
+\epsilon_{xx} = \epsilon_{yy} = \text{strain\_value}, \quad
+\epsilon_{zz} = 0
+\]
+
+\paragraph{Shear strain:} Off-diagonal elements non-zero. Example, xy-plane:
+\[
+\epsilon_{xy} = \epsilon_{yx} = \text{strain\_value}
+\]
+
+\paragraph{Hydrostatic strain:} All diagonal elements equal:
+\[
+\epsilon_{xx} = \epsilon_{yy} = \epsilon_{zz} = \text{strain\_value}
+\]
+
+\subsection{Deformation Matrix}
+The deformation gradient matrix $\mathbf{F}$ is:
+\[
+\mathbf{F} = \mathbf{I} + \boldsymbol{\epsilon}
+\]
+where $\mathbf{I}$ is the $3 \times 3$ identity matrix.
+
+\subsection{Applying Strain to the Lattice}
+The new lattice vectors $\mathbf{a}'_i$ are computed as:
+\[
+\mathbf{a}'_i = \mathbf{F} \cdot \mathbf{a}_i
+\]
+where $\mathbf{a}_i$ are the original lattice vectors.
+
+Atomic positions are scaled automatically:
+\[
+\mathbf{r}'_j = \mathbf{F} \cdot \mathbf{r}_j
+\]
+where $\mathbf{r}_j$ are original atomic positions and $\mathbf{r}'_j$ are strained positions.
+
+\section{Script Functions}
+\begin{itemize}
+    \item \textbf{apply\_strain(atoms, strain\_direction, strain\_percentage)}: Applies strain tensor to ASE Atoms object.
+    \item \textbf{read\_poscar(poscar\_file)}: Reads POSCAR file into ASE Atoms object.
+    \item \textbf{write\_poscar(atoms, output\_file)}: Writes ASE Atoms to POSCAR.
+    \item \textbf{main()}: Command-line interface for batch usage.
+\end{itemize}
+
+\section{Usage Examples}
+\begin{verbatim}
+# Uniaxial strain along x-axis by 2%
+python apply_strain.py -i POSCAR -d x -s 2.0 -o POSCAR_strained
+
+# Biaxial strain in xy-plane by -1.5%
+python apply_strain.py -i POSCAR -d xy-biaxial -s -1.5 -o POSCAR_biaxial
+
+# Hydrostatic strain (uniform expansion) by 0.5%
+python apply_strain.py -i POSCAR -d xyz -s 0.5 -o POSCAR_hydro
+\end{verbatim}
+
+\section{Notes and Best Practices}
+\begin{itemize}
+    \item ASE uses double precision for atomic positions.
+    \item For fixed-cell relaxation in VASP, set \texttt{ISIF=2}.
+    \item Positive strain: expansion; negative strain: compression.
+    \item Invalid strain directions raise \texttt{ValueError}.
+\end{itemize}
+
+\section{Optional Improvements}
+\begin{itemize}
+    \item Loop over multiple strain percentages.
+    \item Logging and automated file naming.
+    \item Integration with high-throughput DFT pipelines.
+\end{itemize}
+
+\section{References}
+\begin{itemize}
+    \item ASE Documentation: \url{https://wiki.fysik.dtu.dk/ase/}
+    \item VASP POSCAR Format: \url{https://www.vasp.at/}
+\end{itemize}
+
+\end{document}
