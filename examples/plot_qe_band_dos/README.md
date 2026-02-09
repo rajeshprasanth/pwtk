@@ -1,9 +1,3 @@
-Here is a **professional README.md** for your QE Band Structure + DOS plotting workflow.
-
-You can copy this directly into a `README.md` file.
-
----
-
 # QE Band Structure + DOS Plotting Tool
 
 A configurable shell-based plotting utility for generating **Band Structure**, **Density of States (DOS)**, and **Combined Band + DOS** plots from Quantum ESPRESSO outputs using **gnuplot**.
