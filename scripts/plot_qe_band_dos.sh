@@ -224,7 +224,9 @@ unset grid
 set key off
 
 # -------- Fermi level (DOS panel) ----------
-set arrow 200 from graph 0, first 0 to graph 1, first 0 \
+
+
+set arrow 200 from 0,$DOSMIN to 0,$DOSMAX \
     nohead dt 2 lw 1 lc rgb "black"
 
 #plot '$DOS_DATA_FILE' using 2:(\$1-fermi):2 w l lw 1.5 lc rgb "red"
